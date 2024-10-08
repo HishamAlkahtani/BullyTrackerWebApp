@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BullyTracker</title>
+  </head>
+  <body>
+    <h1>Bully Tracker</h1>
+    <script>
+      function getAlert() {
+        fetch("https://BTProto.pythonanywhere.com/getAlert")
+          .then((response) => {
+            return response.json();
+          })
+          .then((json) => {
+            console.log("SUCCESS!");
+            console.log(json);
+            if (json.alertExists) {
+              alert(json.alertText);
+            }
+          });
+      }
+      setInterval(getAlert, 5000);
+    </script>
+  </body>
+</html>
