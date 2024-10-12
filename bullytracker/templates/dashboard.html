@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/main.css" />
+    <title>BullyTracker</title>
+  </head>
+  <body>
+    <h1 class="center">Bully Tracker</h1>
+    <div class="cardContainer">
+      <div class="horizontalCardContainer">
+        <div class="mainCard"><h2 class="center">Alerts</h2></div>
+        {% for alert in alertList %}
+        <div class="mainCard">{{alert}}</div>
+        {% endfor %}
+        <button onclick="clearAlerts()">Clear Alerts</button>
+      </div>
+      <div class="horizontalCardContainer">
+        <div class="mainCard"><h2 class="center">Student Locations</h2></div>
+        <div class="mainCard">
+          <table>
+            <tr>
+              <td><b>WatchId</b></td>
+              <td><b>Student Name</b></td>
+              <td><b>Location</b></td>
+            </tr>
+            <tr>
+              <td>1</td>
+              <td>ahmad</td>
+              <td>Room 19</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <script>
+      function clearAlerts() {
+        fetch("/clearAlerts").then((response) => {
+          location.reload();
+        });
+      }
+    </script>
+  </body>
+</html>
