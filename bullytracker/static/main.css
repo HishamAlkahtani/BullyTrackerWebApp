@@ -10,14 +10,27 @@ body {
 
 .mainCard {
     color: black;
-    display: inline-block;
-    width: 100%;
+    display: inline-flex;
+    justify-content: space-around;
+    flex-direction: column;
     background-color: white;
+    width:40%;
+    height: 100%;
     border-radius: 1em;
     margin: .5em;
-    padding: 1em;
+    padding: 0.6em;
 }
 
+.subCard {
+    color: black;
+    display: block;
+    width: 99%;
+    box-sizing: border-box;
+    background-color: rgb(230, 230, 230);
+    border-radius: 1em;
+    margin: 0.3em;
+    padding: 0.3em;
+}
 .cardContainer {
     display: flex;
     justify-content: space-around;
@@ -34,4 +47,24 @@ body {
 
 td {
     width: 250px;;
+}
+
+.sideNavButton {
+    width: 2em;
+    left: 1.5em;
+    top: 1.5em;
+    position: absolute
+}
+
+.hoverPointer:hover {
+    cursor: pointer;
+}
+.sideNav {
+    position: absolute;
+    display: none;
+    background:white;
+    height: 100%;
+    left: 0px;
+    top: 0px;
+    padding: 1em;
 }

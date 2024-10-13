@@ -7,18 +7,38 @@
     <title>BullyTracker</title>
   </head>
   <body>
+    <img
+      class="sideNavButton hoverPointer"
+      src="/side-nav.svg"
+      alt=""
+      onclick="showSideNav()"
+    />
+    <div class="sideNav" id="sideNav">
+      <img
+        src="/xmark.svg"
+        alt=""
+        class="hoverPointer"
+        style="width: 2em"
+        onclick="hideSideNav()"
+      /><br />
+      <a href="/manageStudentsWatches">Manage Students and Watches</a><br />
+      <a href="/manageSchoolBoundaries">Manage School Boundaries</a>
+    </div>
     <h1 class="center">Bully Tracker</h1>
+
     <div class="cardContainer">
-      <div class="horizontalCardContainer">
-        <div class="mainCard"><h2 class="center">Alerts</h2></div>
+      <div class="mainCard">
+        <div class="subCard">
+          <h2 class="center">Alerts</h2>
+        </div>
         {% for alert in alertList %}
-        <div class="mainCard">{{alert}}</div>
+        <div class="subCard">{{alert}}</div>
         {% endfor %}
         <button onclick="clearAlerts()">Clear Alerts</button>
       </div>
-      <div class="horizontalCardContainer">
-        <div class="mainCard"><h2 class="center">Student Locations</h2></div>
-        <div class="mainCard">
+      <div class="mainCard">
+        <div class="subCard"><h2 class="center">Student Locations</h2></div>
+        <div class="subCard">
           <table>
             <tr>
               <td><b>WatchId</b></td>
@@ -39,6 +59,14 @@
         fetch("/clearAlerts").then((response) => {
           location.reload();
         });
+      }
+
+      function hideSideNav() {
+        document.getElementById("sideNav").style.display = "none";
+      }
+
+      function showSideNav() {
+        document.getElementById("sideNav").style.display = "block";
       }
     </script>
   </body>
