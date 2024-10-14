@@ -1,14 +1,39 @@
 <!DOCTYPE html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Register</title>
-</head>
-<body>
-    <form action="/register" method="POST">
-        <input type="text" name="username" placeholder="username">
-        <input type="text" name="password" placeholder="password">
-        <button>Register</button>
-    </form>
-</body>
+    <link rel="stylesheet" href="/main.css" />
+    <style>
+      input,
+      button {
+        margin-top: 1em;
+        border-radius: 1em;
+        padding: 0.5em;
+        border: none;
+      }
+
+      input {
+        background: rgb(247, 247, 247);
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="cardContainer">
+      <div class="mainCard">
+        <form action="/register" method="POST">
+          <input type="text" name="username" placeholder="username" />
+          <input type="text" name="email" placeholder="email" />
+          <input type="text" name="password" placeholder="password" />
+          <button>Register</button>
+        </form>
+      </div>
+    </div>
+  </body>
 </html>

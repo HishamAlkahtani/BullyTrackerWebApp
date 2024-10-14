@@ -2,15 +2,39 @@
 <html>
   <head>
     <title>Login page</title>
+    <link rel="stylesheet" href="/main.css" />
+    <style>
+      input,
+      button {
+        margin-top: 1em;
+        border-radius: 1em;
+        padding: 0.5em;
+        border: none;
+      }
+
+      input {
+        background: rgb(247, 247, 247);
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+      }
+    </style>
   </head>
   <body>
-    <form action="/login" method="POST">
-      <input type="text" name="username" placeholder="username" />
-      <input type="text" name="password" placeholder="password" />
-      <button type="submit">Login</button>
-    </form>
-    <button onclick="window.location='/register'">register</button>
-    <br />
-    {% if failed %} failed to Login {% endif %}
+    <div class="cardContainer">
+      <div class="mainCard">
+        <form action="/login" method="POST">
+          <input type="text" name="username" placeholder="username" />
+          <input type="text" name="password" placeholder="password" />
+          <button type="submit">Login</button>
+        </form>
+
+        <button onclick="window.location='/register'">register</button>
+        <br />
+      </div>
+      {% if failed %} failed to Login {% endif %}
+    </div>
   </body>
 </html>

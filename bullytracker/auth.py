@@ -5,6 +5,12 @@ import uuid
 from flask_login import LoginManager, login_user
 from flask import redirect, request, render_template
 
+import firebase_admin
+from firebase_admin import auth, credentials
+
+cred = credentials.Certificate("fbcred.json")
+firebase_admin_app = firebase_admin.initialize_app(cred)
+
 app.secret_key = uuid.uuid4().hex
 
 login_manager = LoginManager()
@@ -12,7 +18,7 @@ login_manager.login_view = "/login"
 login_manager.init_app(app)
 
 # Temporary in memory user dict, for testing...
-users = {"user": User("user", "user")}
+users = {"user": User("user", "user", "")}
 
 
 @login_manager.user_loader
@@ -51,7 +57,10 @@ def register():
         form = request.form
         username = form["username"]
         password = form["password"]
-        users.update({username: User(username, password)})
+        email = form["email"]
+        user = User(username, email, password)
+        users.update({username: user})
+        auth.create_user(**user.to_firebase_dict())
         return redirect("/login")
     else:
         return render_template("register.html")
