@@ -25,16 +25,27 @@
   <body>
     <div class="cardContainer">
       <div class="mainCard">
-        <form action="/login" method="POST">
-          <input type="text" name="username" placeholder="username" />
-          <input type="text" name="password" placeholder="password" />
-          <button type="submit">Login</button>
+        <form id="loginForm" action="/login" method="POST">
+          <input
+            type="text"
+            id="username"
+            name="username"
+            placeholder="username"
+          />
+          <input
+            type="text"
+            id="password"
+            name="password"
+            placeholder="password"
+          />
+          <input type="hidden" id="idtokenInput" name="idtoken" hidden="true" />
+          <button type="button" id="loginButton">Login</button>
         </form>
-
         <button onclick="window.location='/register'">register</button>
         <br />
       </div>
-      {% if failed %} failed to Login {% endif %}
     </div>
+    {% if failed %} failed to Login {% endif %}
+    <script type="module" src="/firebaseLogin.js"></script>
   </body>
 </html>

@@ -7,12 +7,6 @@
     <title>BullyTracker</title>
   </head>
   <body>
-    <img
-      class="sideNavButton hoverPointer"
-      src="/side-nav.svg"
-      alt=""
-      onclick="showSideNav()"
-    />
     <div class="sideNav" id="sideNav">
       <img
         src="/xmark.svg"
@@ -23,9 +17,18 @@
       /><br />
       <a href="/manageStudentsWatches">Manage Students and Watches</a><br />
       <a href="/manageSchoolBoundaries">Manage School Boundaries</a><br />
+      <a href="/manageWhatsappList">Manage Whatsapp Notification List</a>
     </div>
-    <h1 class="center">Bully Tracker</h1>
-
+    <nav class="topNav">
+      <h1 class="center">Bully Tracker</h1>
+    </nav>
+    <img
+      class="sideNavButton hoverPointer"
+      src="/side-nav.svg"
+      id="showSideNavImg"
+      alt=""
+      onclick="showSideNav()"
+    />
     <div class="cardContainer">
       <div class="mainCard">
         <div class="subCard">
@@ -63,10 +66,12 @@
 
       function hideSideNav() {
         document.getElementById("sideNav").style.display = "none";
+        document.getElementById("showSideNavImg").style.display = "block";
       }
 
       function showSideNav() {
         document.getElementById("sideNav").style.display = "block";
+        document.getElementById("showSideNavImg").style.display = "none";
       }
     </script>
   </body>

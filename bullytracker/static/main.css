@@ -1,4 +1,6 @@
 body {
+    margin: 0;
+    padding: 0;
     font-family: 'Aileron', sans-serif;
     background: #00b2b2;
     color: white;
@@ -51,8 +53,8 @@ td {
 
 .sideNavButton {
     width: 2em;
-    left: 1.5em;
-    top: 1.5em;
+    left: 1em;
+    top: 1em;
     position: absolute
 }
 
@@ -67,4 +69,16 @@ td {
     left: 0px;
     top: 0px;
     padding: 1em;
+}
+
+.topNav {
+    width:100%;
+    top: 0px;
+    float:right;
+    background: white;
+    color: black;
+    margin-bottom: 1em;
+    -webkit-box-shadow: 0px 5px 0px 0px rgb(230, 230, 230);
+    -moz-box-shadow: 0px 5px 0px 0px rgb(230, 230, 230);
+    box-shadow: 0px 5px 0px 0px rgb(230, 230, 230);
 }
