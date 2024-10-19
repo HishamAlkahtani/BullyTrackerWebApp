@@ -33,13 +33,12 @@ const auth = getAuth(app);
 
 // Function to be called when login button is pressed
 function loginButtonClicked() {
-  let username = document.getElementById("username").value;
+  let username = document.getElementById("email").value;
   let password = document.getElementById("password").value;
 
   signInWithEmailAndPassword(auth, username, password)
     .then((user) => {
       return user.user.getIdToken().then((idtoken) => {
-        // TODO: Do stuff with idtoken (POST it to backend)
         document.getElementById("idtokenInput").value = idtoken;
         document.getElementById("loginForm").submit();
       });

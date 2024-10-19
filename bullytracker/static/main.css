@@ -64,7 +64,7 @@ td {
 .sideNav {
     position: absolute;
     display: none;
-    background:white;
+    background:rgb(230, 230, 230);
     height: 100%;
     left: 0px;
     top: 0px;

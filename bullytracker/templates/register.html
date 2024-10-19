@@ -7,7 +7,8 @@
     <link rel="stylesheet" href="/main.css" />
     <style>
       input,
-      button {
+      button,
+      select {
         margin-top: 1em;
         border-radius: 1em;
         padding: 0.5em;
@@ -31,9 +32,24 @@
           <input type="text" name="username" placeholder="username" />
           <input type="text" name="email" placeholder="email" />
           <input type="text" name="password" placeholder="password" />
+          <select
+            name="accountType"
+            id="accountType"
+            placeholder="Account type"
+          >
+            <option value="schoolAdmin">School Admin</option>
+            <option value="parentAccount">Parent Account</option>
+          </select>
+          <input
+            type="text"
+            name="schoolName"
+            id="schoolName"
+            placeholder="School Name"
+          />
           <button>Register</button>
         </form>
       </div>
     </div>
+    {% if failed %} failed to Register {% endif %}
   </body>
 </html>

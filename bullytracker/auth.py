@@ -1,16 +1,17 @@
 from bullytracker import app
 from bullytracker.user import User
 
+from bullytracker import firestoredb
+
 import uuid
-from flask_login import LoginManager, login_user
+from flask_login import LoginManager, login_user, logout_user
 from flask import redirect, request, render_template
 
-import firebase_admin
-from firebase_admin import auth, credentials
+from firebase_admin import auth
 
-# cred.json is NOT included in the repo!
-cred = credentials.Certificate("cred.json")
-firebase_admin_app = firebase_admin.initialize_app(cred)
+# cred = credentials.Certificate("cred.json")
+# firebase_admin_app = initialize_app(cred)
+
 
 app.secret_key = uuid.uuid4().hex
 
@@ -35,13 +36,8 @@ def login():
         form = request.form
         idtoken = form["idtoken"]
 
-        user = load_user(idtoken)
-        if user is None:
-            print("user is none")
-            return render_template("login.html", failed=True)
-        else:
-            login_user(user)
-            return redirect("/")
+        login_user(load_user(idtoken))
+        return redirect("/")
 
     else:
         return render_template("login.html")
@@ -51,14 +47,35 @@ def login():
 def register():
     if request.method == "POST":
         form = request.form
-        username = form["username"]
-        password = form["password"]
-        email = form["email"]
+        user = {
+            "username": form["username"],
+            "email": form["email"],
+            "password": form["password"],
+            "accountType": form["accountType"],
+            "schoolName": form["schoolName"],
+        }
 
-        user_data = {"uid": username, "password": password, "email": email}
+        # Register the user to firebase authentication
+        auth.create_user(
+            **{
+                "uid": user["username"],
+                "password": user["password"],
+                "email": user["email"],
+            }
+        )
 
-        auth.create_user(**user_data)
+        # Store relevant user information in firestore
+        user.pop("password")  # Password not needed in db
+        if not firestoredb.addUser(user):
+            auth.delete_user(user["username"])
+            return render_template("register.html", failed=True)
 
         return redirect("/login")
     else:
         return render_template("register.html")
+
+
+@app.route("/logout")
+def logout():
+    logout_user()
+    return redirect("/login")
