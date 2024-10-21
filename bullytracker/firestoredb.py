@@ -8,16 +8,17 @@ firebase_admin_app = initialize_app(cred)
 
 db = firestore.client()
 
+school_collection = db.collection("schools")
+watch_collection = db.collection("watches")
 
-def addUser(user):
-    school_collection = db.collection("schools")
-    schoolExists = school_collection.document(user["schoolName"]).get().exists
+def add_user(user):
+    school_exists = school_collection.document(user["schoolName"]).get().exists
     # If account creator is an admin, add a new school to the list
     # (every admin has one school and every school has one admin)
     if user["accountType"] == "schoolAdmin":
 
         # An admin accounts creates a school, so school name must not be taken!
-        if schoolExists:
+        if school_exists:
             return False
 
         response = school_collection.document(user["schoolName"]).set(
@@ -26,7 +27,7 @@ def addUser(user):
 
     elif user["accountType"] == "parentAccount":
         # A parent only signs up to an existing school
-        if not schoolExists:
+        if not school_exists:
             return False
 
     user_collection = db.collection("users")
@@ -36,3 +37,9 @@ def addUser(user):
     user_collection.document(user["username"]).set(user_data)
 
     return True
+
+def check_if_watch_exists(watch_id):
+    return watch_collection.document(watch_id).get().exists
+
+def add_watch(watch_id):
+    watch_collection.document(watch_id).set({})

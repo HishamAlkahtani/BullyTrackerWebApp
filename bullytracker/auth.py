@@ -66,7 +66,7 @@ def register():
 
         # Store relevant user information in firestore
         user.pop("password")  # Password not needed in db
-        if not firestoredb.addUser(user):
+        if not firestoredb.add_user(user):
             auth.delete_user(user["username"])
             return render_template("register.html", failed=True)
 
