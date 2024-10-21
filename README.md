@@ -27,9 +27,8 @@ flask --app bullytracker run --debug
 ### Back End
 - [ ] Geofencing: Figure out a way to determine if a student's coordinate are within a certain location
 - [ ] Display different home page based on type of user that's logged in; If a school admin is logged in, they should see the dashboard of their school. If the logged in user is a parent, they should see their children's info
-- [ ] Watch Setup Process
 - [ ] Proper error message when register fails
-- [ ] Setup process (tentative):
+- [ ] Watch Setup process (tentative):
     - [X] 1) Setup an endpoint for the watch app to call, it randomly generates a string id and checks firestore to see if the generated id already exists
     - [ ] 2) Setup an endpoint for the watch app to call periodically to check if the watch has been activated or not
     - [ ] 3) When the school admin chooses the watch and enters the displayed watch id in the app, the endpoint tells the watch that the watch is currently being linked, and tells the watch the name of the school that is trying to connect to it...
