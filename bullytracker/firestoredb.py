@@ -38,8 +38,16 @@ def add_user(user):
 
     return True
 
+def get_watch(watch_id):
+    return watch_collection.document(watch_id).get()
+
 def check_if_watch_exists(watch_id):
-    return watch_collection.document(watch_id).get().exists
+    return get_watch(watch_id).exists
+
+def set_watch(watch_id, dict):
+    watch_collection.document(watch_id).set(dict)
 
 def add_watch(watch_id):
-    watch_collection.document(watch_id).set({})
+    watch_collection.document(watch_id).set({
+        "isActive": False
+    })

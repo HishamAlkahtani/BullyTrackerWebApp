@@ -19,6 +19,7 @@ flask --app bullytracker run --debug
 - [X] Link login/register pages to firebase authentication
 - [ ] Form validation on register and login form
 - [ ] Make the school name field in the parent registration form a drop down menu that shows available schools
+- [ ] Remove the username field from the register page, as it is useless. A full name field will be more useful.
 - [ ] Proper error messages when register fails
 - [ ] Geofencing: Figure out how the map UI will work
 - [ ] Parent dashboard
@@ -34,5 +35,6 @@ flask --app bullytracker run --debug
     - [ ] 2) Setup an endpoint for the watch app to call periodically to check if the watch has been activated or not
     - [ ] 3) When the school admin chooses the watch and enters the displayed watch id in the app, the endpoint tells the watch that the watch is currently being linked, and tells the watch the name of the school that is trying to connect to it...
     - [ ] 4) On the display of the watch, a prompt is shown, if YES is clicked on the watch, the setup process is now complete, and the watch is now active.
+- [ ] Make the user class fetch all relevant properties from firstore upon creation
 ### Firebase
 - [ ] Geofencing: Figure out how the coordinates should be stored.
