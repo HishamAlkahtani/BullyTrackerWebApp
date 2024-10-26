@@ -10,6 +10,8 @@ db = firestore.client()
 
 school_collection = db.collection("schools")
 watch_collection = db.collection("watches")
+user_collection = db.collection("users")
+
 
 def add_user(user):
     school_exists = school_collection.document(user["schoolName"]).get().exists
@@ -30,7 +32,6 @@ def add_user(user):
         if not school_exists:
             return False
 
-    user_collection = db.collection("users")
     user_data = user.copy()
     user_data.pop("username")
 
@@ -38,16 +39,40 @@ def add_user(user):
 
     return True
 
+
+def get_user(user_id):
+    return user_collection.document(user_id).get()
+
+
 def get_watch(watch_id):
     return watch_collection.document(watch_id).get()
+
+
+def get_watches_by_school_name(school_name):
+    # list of document snapshots
+    watches_list = watch_collection.where(
+        filter=firestore.FieldFilter("schoolName", "==", school_name)
+    ).get()
+
+    # list of dicts containng only neccessary data
+    watch_list = []
+    for watch in watches_list:
+        watch_list.append(
+            {
+                "watchId": watch.id,
+            }
+        )
+
+    return watch_list
+
 
 def check_if_watch_exists(watch_id):
     return get_watch(watch_id).exists
 
+
 def set_watch(watch_id, dict):
     watch_collection.document(watch_id).set(dict)
 
+
 def add_watch(watch_id):
-    watch_collection.document(watch_id).set({
-        "isActive": False
-    })
+    watch_collection.document(watch_id).set({"isActive": False})

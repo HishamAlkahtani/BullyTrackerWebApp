@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/main.css" />
+    <title>Manage students and watches</title>
+    <style>
+      .popup {
+        position: absolute;
+        top: 45%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        height: auto;
+        z-index: 100;
+      }
+
+      h2 {
+        text-align: center;
+      }
+
+      #overlay {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        opacity: 0.3;
+        background: black;
+      }
+
+      .hidden {
+        display: none;
+      }
+      input,
+      button {
+        margin: 0.2em;
+      }
+
+      .center {
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="popup mainCard hidden" id="addWatchCard" hidden="true">
+      <h2>Add a new watch</h2>
+      <h3 class="center hidden" id="addWatchTitle"></h3>
+      <p class="center hidden" id="addWatchBody"></p>
+      <p style="color: gray">
+        Download and launch the Bully Tracker Watch App, and enter the watchId
+        displayed on the screen.
+      </p>
+      <input
+        type="text"
+        name="watchId"
+        id="watchIdField"
+        placeholder="watchId"
+      />
+      <button onclick="requestToAddWatch()">Add watch</button>
+      <button onclick="cancelAddWatch()">Cancel</button>
+    </div>
+    <div class="cardContainer">
+      <div class="mainCard">
+        <h2>Watches</h2>
+        <table>
+          <tr>
+            <th>watch id</th>
+            <th>student name</th>
+            <th></th>
+          </tr>
+          {% for watch in watch_list %}
+          <tr>
+            <td>{{ watch.watchId }}</td>
+            <td>Some student</td>
+            <td>
+              <a href="/removeWatch/{{watch.watchId}}">Remove Watch</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </table>
+        <button onclick="toggleAddWatchWindow()">Add New Watch</button>
+      </div>
+    </div>
+    <div class="hidden" id="overlay"></div>
+    <script>
+      let watchSetupChecksIntervalId = null;
+      let pendingWatchId = null;
+
+      let addWatchTitle = document.getElementById("addWatchTitle");
+      let addWatchBody = document.getElementById("addWatchBody");
+
+      function toggleAddWatchWindow() {
+        let overlay = document.getElementById("overlay");
+        let addWatchCard = document.getElementById("addWatchCard");
+
+        addWatchTitle.classList.add("hidden");
+        addWatchBody.classList.add("hidden");
+        overlay.classList.toggle("hidden");
+        addWatchCard.classList.toggle("hidden");
+      }
+
+      function cancelAddWatch() {
+        // cancels that pending watch request (if exists), hides the popup
+        if (watchSetupChecksIntervalId) {
+          clearInterval(watchSetupChecksIntervalId);
+          watchSetupChecksIntervalId = null;
+          // TODO: Tell the backend that the user is cancelling the request!
+          // fetch("/cancelWatchSetupRequest/" + pendingWatchId); ?
+        }
+
+        toggleAddWatchWindow();
+      }
+
+      function requestToAddWatch() {
+        addWatchTitle.classList.add("hidden");
+        addWatchBody.classList.add("hidden");
+
+        let watchIdField = document.getElementById("watchIdField");
+        let watchId = watchIdField.value;
+
+        console.log("Sending request to server to add watch: " + watchId);
+
+        fetch("/addWatch/" + watchId, {
+          credentials: "include",
+        })
+          .then((response) => {
+            return response.json();
+          })
+          .then((json) => {
+            if (json.requestReceived) {
+              addWatchTitle.textContent =
+                "Request Recieved Sucessfully! Waiting For Watch...";
+              addWatchBody.textContent = json["msg"];
+
+              addWatchTitle.classList.remove("hidden");
+              addWatchBody.classList.remove("hidden");
+
+              pendingWatchId = watchId;
+              watchSetupChecksIntervalId = setInterval(checkSetupStatus, 3000);
+            } else {
+              addWatchTitle.textContent = "Request Failed.";
+              addWatchBody.textContent = json["msg"];
+              addWatchTitle.classList.remove("hidden");
+              addWatchBody.classList.remove("hidden");
+            }
+          })
+          .catch((error) => {
+            alert(error);
+          });
+      }
+
+      function checkSetupStatus() {
+        if (!pendingWatchId) {
+          clearInterval(watchSetupChecksIntervalId);
+          watchSetupChecksIntervalId = null;
+          return;
+        }
+
+        fetch("/getWatchSetupStatus/" + pendingWatchId, {
+          credentials: "include",
+        })
+          .then((response) => {
+            return response.json();
+          })
+          .then((json) => {
+            if (!json["complete"]) return;
+
+            if (json["success"]) location.reload();
+            else {
+              addWatchTitle.textContent = "Failed to add watch!";
+              addWatchBody.textContent = json["msg"];
+            }
+          })
+          .catch((error) => {
+            alert(error);
+          });
+      }
+    </script>
+  </body>
+</html>

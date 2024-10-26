@@ -27,7 +27,7 @@ def load_user(user_id):
 
 @login_manager.unauthorized_handler
 def unauthorized():
-    return redirect("/login?next=" + request.path)
+    return redirect("/login?next=" + request.path[1:])
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -35,8 +35,8 @@ def login():
     if request.method == "POST":
         form = request.form
         idtoken = form["idtoken"]
-
         login_user(load_user(idtoken))
+
         return redirect("/")
 
     else:

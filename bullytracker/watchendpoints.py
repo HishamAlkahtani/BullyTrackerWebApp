@@ -40,10 +40,8 @@ def assign_watch_id():
 
     if not short_id is None:
         firestoredb.add_watch(short_id)
-        return jsonify({
-            "watchId": short_id
-        })
-    
+        return jsonify({"watchId": short_id})
+
 
 # The watch calls this endpoint to check whether it has been linked to a school yet or not
 # If the school admin tries to link the watch to a school, this endpoint will return the
@@ -53,22 +51,20 @@ def check_setup_status(watch_id):
     if request.method == "GET":
         watch = firestoredb.get_watch(watch_id).to_dict()
         return jsonify(watch)
-    
+
     elif request.method == "POST":
         watch_response = request.json
-        not_active_empty_watch = {
-                "isActive": False
-        }
+        not_active_empty_watch = {"isActive": False}
 
         # Only the watch can set the isActive field to true!
-        # So, if the watch responds with isActive = true, the watch accepts 
+        # So, if the watch responds with isActive = true, the watch accepts
         # the setup request.
         if watch_response["isActive"] == True:
             prev_watch_info = firestoredb.get_watch(watch_id).to_dict()
 
-            if watch_response["schoolName"] != prev_watch_info["schoolName"]:
+            if watch_response["schoolName"] != prev_watch_info.get("schoolName"):
                 # This should never happen but just in case.
-                # The watch acccepts to be set up but agreed 
+                # The watch acccepts to be set up but agreed
                 # to a different school than the one in db.
                 firestoredb.set_watch(watch_id, not_active_empty_watch)
                 print("Watch accepts set up but schoolName mismatch!!")
@@ -76,10 +72,9 @@ def check_setup_status(watch_id):
 
             firestoredb.set_watch(watch_id, watch_response)
             return watch_response
-        
+
         else:
 
             # remove old school name, thereby canceling the setup request
-            firestoredb.set_watch(watch_id, not_active_empty_watch) 
+            firestoredb.set_watch(watch_id, not_active_empty_watch)
             return jsonify(not_active_empty_watch)
-            
