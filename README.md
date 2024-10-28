@@ -36,5 +36,6 @@ flask --app bullytracker run --debug
     - [X] 3) When the school admin chooses the watch and enters the displayed watch id in the app, the endpoint tells the watch that the watch is currently being linked, and tells the watch the name of the school that is trying to connect to it...
     - [X] 4) On the display of the watch, a prompt is shown, if YES is clicked on the watch, the setup process is now complete, and the watch is now active.
 - [ ] Make the user class fetch all relevant properties from firstore upon creation
+- [ ] Cache layer vs in-memory data + some synch mechanism? will it be needed at all? or will the performance of just firestore be enough? what tasks can be cached?
 ### Firebase
 - [ ] Geofencing: Figure out how the coordinates should be stored.
