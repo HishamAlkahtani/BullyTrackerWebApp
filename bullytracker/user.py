@@ -20,6 +20,8 @@ class User:
             self.is_authenticated = False
             self.is_active = False
             # is this needed or are the attributes enough?
+            print("User authentication failed: ")
+            print(e)
             logout_user()
             return  # No need to fetch data if the user is bad...
 

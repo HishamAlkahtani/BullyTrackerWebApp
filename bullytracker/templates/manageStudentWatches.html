@@ -40,6 +40,10 @@
       .center {
         text-align: center;
       }
+      td,
+      th {
+        border: 1px solid black;
+      }
     </style>
   </head>
   <body>
@@ -67,12 +71,14 @@
           <tr>
             <th>watch id</th>
             <th>student name</th>
+            <th>Is Active</th>
             <th></th>
           </tr>
           {% for watch in watch_list %}
           <tr>
             <td>{{ watch.watchId }}</td>
             <td>Some student</td>
+            <td>{{watch.isActive}}</td>
             <td>
               <a href="/removeWatch/{{watch.watchId}}">Remove Watch</a>
             </td>

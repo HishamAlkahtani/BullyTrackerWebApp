@@ -36,7 +36,11 @@
           <h2 class="center">Alerts</h2>
         </div>
         {% for alert in alertList %}
-        <div class="subCard">{{alert}}</div>
+        <div class="subCard">
+          watchId: {{alert.watchId}}<br />
+          timestamp: {{alert.timestamp}}<br />
+          locatin: {{alert.location}}
+        </div>
         {% endfor %}
         <button onclick="clearAlerts()">Clear Alerts</button>
       </div>

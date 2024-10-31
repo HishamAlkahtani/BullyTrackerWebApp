@@ -2,21 +2,22 @@
 
 from bullytracker import app
 from bullytracker import firestoredb
-from flask import jsonify, request
+from datetime import datetime
+from flask import jsonify, request, make_response
 import uuid
 
 
-# NOT THREAD SAFE! Change later, use firestore?
+# NOT THREAD SAFE! Change later, use firestore...? maybe cache active alerts?
 alerts = []
 
 
 # The app recieves alerts from the watch on this endpoint
-@app.route("/watchAPI/alert/<name>/<location>")
-def recv_alert(name, location):
-    msg = "Alert Recieved from: " + name + " At location: " + location
-    alerts.append(msg)
-    print(msg)
-    return "Alert recieved"
+@app.route("/watchAPI/alert/<watch_id>/<location>")
+def recv_alert(watch_id, location):
+    if firestoredb.add_active_alert(watch_id, datetime.now(), location):
+        return "Alert recieved"
+    else:
+        return make_response("Alert failed", 400)
 
 
 # Tries to assign the shortest id possible (for readability)

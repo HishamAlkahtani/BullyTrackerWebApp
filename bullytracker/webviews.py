@@ -1,6 +1,6 @@
 # Contains all the views for the frontend
 
-from flask import render_template, request, jsonify, abort
+from flask import render_template, request, jsonify, abort, make_response, redirect
 from bullytracker import app
 from bullytracker.watchendpoints import alerts
 from bullytracker import firestoredb
@@ -10,14 +10,22 @@ from flask_login import login_required, current_user
 @app.route("/")
 @login_required
 def home():
-    # TODO: put relative stuff...
-    return render_template("dashboard.html", alertList=alerts)
+    if current_user.user_data["accountType"] == "schoolAdmin":
+        # should active alerts be cached?
+        alerts = firestoredb.get_active_alerts(current_user.user_data["schoolName"])
+        if not alerts:
+            alerts = []
+        return render_template("adminDashboard.html", alertList=alerts)
+
+    elif current_user.user_data["accountType"] == "parentAccount":
+        return render_template("parentDashboard.html")
 
 
 @app.route("/clearAlerts")
 @login_required
 def clear_alerts():
     alerts.clear()
+    firestoredb.clear_active_alerts(current_user.user_data["schoolName"])
     return "List Cleared"
 
 
@@ -109,15 +117,31 @@ def get_watch_setup_status(watch_id):
 @app.route("/cancelWatchSetupRequest/<watch_id>")
 @login_required
 def cancel_watch_setup_process(watch_id):
-    # TODO
+    # This is the same as remove_watch()... so might should be removed, depends on how the
+    # front end will look like. If the setup process includes waiting for the watch to accept
+    # or it just shows up in the list but with an inactive status...
     pass
 
 
 @app.route("/removeWatch/<watch_id>")
 @login_required
 def remove_watch(watch_id):
-    # TODO
-    pass
+    watch = firestoredb.get_watch(watch_id).to_dict()
+
+    school_name = watch.get("schoolName")
+
+    if not school_name:
+        return make_response("Error while fetching watch", 400)
+
+    if (
+        school_name != current_user.user_data["schoolName"]
+        or current_user.user_data["accountType"] != "schoolAdmin"
+    ):
+        return abort(401)
+
+    firestoredb.set_watch(watch_id, {"isActive": False})
+
+    return redirect("/manageStudentWatches")
 
 
 # Recieve the latest alert (to be called by client-side javascript)

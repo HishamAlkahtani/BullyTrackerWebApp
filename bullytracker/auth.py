@@ -22,6 +22,9 @@ login_manager.init_app(app)
 
 @login_manager.user_loader
 def load_user(user_id):
+    # This thing is ridiculous, it makes every single request slower!
+    # This MUST be cached. currently it fetches ALL the data related to the user
+    # with EVERY request!!
     return User(user_id)
 
 
@@ -35,8 +38,8 @@ def login():
     if request.method == "POST":
         form = request.form
         idtoken = form["idtoken"]
-        login_user(load_user(idtoken))
 
+        login_user(load_user(idtoken))
         return redirect("/")
 
     else:
@@ -65,7 +68,7 @@ def register():
         )
 
         # Store relevant user information in firestore
-        user.pop("password")  # Password not needed in db
+        user.pop("password")  # Password not needed in db, remove it
         if not firestoredb.add_user(user):
             auth.delete_user(user["username"])
             return render_template("register.html", failed=True)

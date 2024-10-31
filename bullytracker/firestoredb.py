@@ -13,6 +13,14 @@ watch_collection = db.collection("watches")
 user_collection = db.collection("users")
 
 
+def get_school(school_name):
+    return school_collection.document(school_name).get()
+
+
+def set_school(school_name, data):
+    school_collection.document(school_name).set(data)
+
+
 def add_user(user):
     school_exists = school_collection.document(user["schoolName"]).get().exists
     # If account creator is an admin, add a new school to the list
@@ -23,7 +31,7 @@ def add_user(user):
         if school_exists:
             return False
 
-        response = school_collection.document(user["schoolName"]).set(
+        school_collection.document(user["schoolName"]).set(
             {"adminAccount": user["username"]}
         )
 
@@ -60,10 +68,58 @@ def get_watches_by_school_name(school_name):
         watch_list.append(
             {
                 "watchId": watch.id,
+                "isActive": watch.to_dict().get("isActive"),
             }
         )
 
     return watch_list
+
+
+# Active alerts are stored directly in school document
+def add_active_alert(watch_id, timestamp, location):
+    alert = {
+        "watchId": watch_id,
+        "timestamp": timestamp,
+        "location": location,
+    }
+
+    watch_doc = get_watch(watch_id)
+
+    if not watch_doc:
+        print("watch_doc failed")
+        return False
+
+    watch = watch_doc.to_dict()
+    school_name = watch.get("schoolName")
+
+    if not watch.get("isActive") or not school_name:
+        print("either not active or wrong school")
+        return False
+
+    school = get_school(school_name).to_dict()
+
+    active_alerts = school.get("activeAlerts")
+    print("ACTIVE ALERTS:" + str(active_alerts))
+
+    if not active_alerts:
+        active_alerts = [alert]
+    else:
+        active_alerts.append(alert)
+
+    school["activeAlerts"] = active_alerts
+
+    set_school(school_name, school)
+    return True
+
+
+def get_active_alerts(school_name):
+    return get_school(school_name).to_dict().get("activeAlerts")
+
+
+def clear_active_alerts(school_name):
+    school_dict = get_school(school_name).to_dict()
+    school_dict.pop("activeAlerts")
+    set_school(school_name, school_dict)
 
 
 def check_if_watch_exists(watch_id):
