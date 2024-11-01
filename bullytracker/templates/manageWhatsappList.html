@@ -6,5 +6,35 @@
     <title>Notification List</title>
     <link rel="stylesheet" href="/main.css" />
   </head>
-  <body></body>
+  <body>
+    <div class="cardContainer">
+      <div class="mainCard">
+        <h1>Messaging List</h1>
+        {% for contact in messaging_list %}
+        <div class="subCard">
+          {{contact.teacherName}} <br />
+          {{contact.phoneNumber}} <br />
+          <a href="/removeContact/{{contact.phoneNumber}}">remove contact</a>
+        </div>
+        {% endfor %}
+        <h2>Add contact</h2>
+        <form action="/manageWhatsappList" method="POST">
+          <input
+            type="text"
+            name="teacherName"
+            placeholder="Teacher Name"
+            style="width: 90%"
+          /><br />
+          <input
+            type="text"
+            name="phoneNumber"
+            style="width: 90%"
+            placeholder="Phone Number (e.g. +966512345678)"
+          />
+          <br />
+          <button>Add new contact</button>
+        </form>
+      </div>
+    </div>
+  </body>
 </html>

@@ -17,6 +17,28 @@ def get_school(school_name):
     return school_collection.document(school_name).get()
 
 
+def get_messaging_list(school_name):
+    return get_school(school_name).to_dict()["messagingList"]
+
+
+def add_to_messaging_list(school_name, contact):
+    school = get_school(school_name).to_dict()
+    school["messagingList"].append(contact)
+    set_school(school_name, school)
+
+
+def remove_contact(school_name, phone_number):
+    school = get_school(school_name).to_dict()
+    messaging_list = school["messagingList"]
+
+    new_messaging_list = [
+        contact for contact in messaging_list if contact["phoneNumber"] != phone_number
+    ]
+
+    school["messagingList"] = new_messaging_list
+    set_school(school_name, school)
+
+
 def set_school(school_name, data):
     school_collection.document(school_name).set(data)
 

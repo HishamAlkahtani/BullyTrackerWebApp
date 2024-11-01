@@ -2,3 +2,4 @@ __pycache__/
 bullytracker.egg-info/
 cred.json
 .DS_Store
+twiliocred.json

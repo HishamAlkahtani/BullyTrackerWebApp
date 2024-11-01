@@ -17,7 +17,7 @@ flask --app bullytracker run --debug
 
 ### Front End
 - [X] Link login/register pages to firebase authentication
-- [ ] Form validation on register and login form
+- [ ] Client side form validation on all forms
 - [ ] Make the school name field in the parent registration form a drop down menu that shows available schools
 - [ ] Remove the username field from the register page, as it is useless. A full name field will be more useful.
 - [ ] Proper error messages when register fails
@@ -33,6 +33,9 @@ flask --app bullytracker run --debug
 - [X] Admin ability to remove watch
 - [ ] Endpoints to serve real time updates to frontend (like student locations, pending alerts, etc...)
 - [ ] BUG: When alerts are stored in firestore, the timestamp is off by three hours, this could be because of an issue with how the python date object is handled by the firestore package
+- [X] Whatsapp messaging: school admin able to add/remove contacts
+- [X] Create school whatsapp messaging list
+- [X] SOS Alerts are sent to everyone in the school's whatsapp messaging list
 #### Caching and performance
 - Cache layer vs in-memory data + some synch mechanism? will it be needed at all? or will the performance of just firestore be enough? what tasks can be cached? Look into flask_caching and redis
 - should active_alerts be cached?

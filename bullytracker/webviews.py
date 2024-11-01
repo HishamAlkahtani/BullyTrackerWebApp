@@ -29,10 +29,30 @@ def clear_alerts():
     return "List Cleared"
 
 
-@app.route("/manageWhatsappList")
+@app.route("/manageWhatsappList", methods=["GET", "POST"])
 @login_required
 def get_manage_whatsapp_page():
-    return render_template("manageWhatsappList.html", numbers=[])
+    school_name = current_user.user_data["schoolName"]
+
+    if request.method == "POST":
+        form = request.form
+        contact = {
+            "teacherName": form["teacherName"],
+            "phoneNumber": form["phoneNumber"],
+        }
+
+        firestoredb.add_to_messaging_list(school_name, contact)
+
+    messaging_list = firestoredb.get_messaging_list(school_name)
+    return render_template("manageWhatsappList.html", messaging_list=messaging_list)
+
+
+@app.route("/removeContact/<phone_number>")
+@login_required
+def remove_contact(phone_number):
+    school_name = current_user.user_data["schoolName"]
+    firestoredb.remove_contact(school_name, phone_number)
+    return redirect("/manageWhatsappList")
 
 
 @app.route("/manageStudentWatches")
