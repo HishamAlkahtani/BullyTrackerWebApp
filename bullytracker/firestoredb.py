@@ -18,7 +18,10 @@ def get_school(school_name):
 
 
 def get_messaging_list(school_name):
-    return get_school(school_name).to_dict().get("messagingList")
+    messaging_list = get_school(school_name).to_dict().get("messagingList")
+    if messaging_list:
+        return messaging_list
+    return []
 
 
 def add_to_messaging_list(school_name, contact):
