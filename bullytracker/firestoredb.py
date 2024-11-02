@@ -87,12 +87,9 @@ def get_watches_by_school_name(school_name):
     # list of dicts containng only neccessary data
     watch_list = []
     for watch in watches_list:
-        watch_list.append(
-            {
-                "watchId": watch.id,
-                "isActive": watch.to_dict().get("isActive"),
-            }
-        )
+        watch_dict = watch.to_dict()
+        watch_dict.update({"watchId": watch.id})
+        watch_list.append(watch_dict)
 
     return watch_list
 
@@ -117,6 +114,8 @@ def add_active_alert(watch_id, timestamp, location):
     if not watch.get("isActive") or not school_name:
         print("either not active or wrong school")
         return False
+
+    alert.update({"studentName": watch.get("studentName"), "grade": watch.get("grade")})
 
     school = get_school(school_name).to_dict()
 

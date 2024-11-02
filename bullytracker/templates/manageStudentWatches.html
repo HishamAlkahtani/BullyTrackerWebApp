@@ -66,19 +66,28 @@
     </div>
     <div class="cardContainer">
       <div class="mainCard">
-        <h2>Watches</h2>
+        <h2>Watches and Students</h2>
         <table>
           <tr>
-            <th>watch id</th>
-            <th>student name</th>
-            <th>Is Active</th>
+            <th>Watch Id</th>
+            <th>Student Info</th>
+            <th>Watch Is Active</th>
+            <th></th>
             <th></th>
           </tr>
           {% for watch in watch_list %}
           <tr>
             <td>{{ watch.watchId }}</td>
-            <td>Some student</td>
+            <td>
+              Name: {{ watch.studentName }}<br />
+              Grade: {{ watch.grade }}
+            </td>
             <td>{{watch.isActive}}</td>
+            <td>
+              <a href="/editStudentData/{{watch.watchId}}">
+                Edit Student Data</a
+              >
+            </td>
             <td>
               <a href="/removeWatch/{{watch.watchId}}">Remove Watch</a>
             </td>

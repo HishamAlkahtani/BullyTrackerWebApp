@@ -28,9 +28,10 @@ def load_user(user_id):
     return User(user_id)
 
 
+# TODO: Redirect to the previously request page through cookies
 @login_manager.unauthorized_handler
 def unauthorized():
-    return redirect("/login?next=" + request.path[1:])
+    return redirect("/login")
 
 
 @app.route("/login", methods=["GET", "POST"])

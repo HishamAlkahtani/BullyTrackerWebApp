@@ -67,6 +67,9 @@ def manage_student_watches_page():
     return render_template("manageStudentWatches.html", watch_list=watches)
 
 
+# Initiates the setup process by setting the appropriate fields
+# The watch then will read the data from firestore, and communicate
+# it's response by setting the appropriate fields
 @app.route("/addWatch/<watch_id>")
 @login_required
 def add_watch(watch_id):
@@ -88,6 +91,7 @@ def add_watch(watch_id):
         )
 
     # We now know watch exists, and hasn't been linked to a school
+
     firestoredb.set_watch(
         watch_id,
         {
@@ -104,6 +108,8 @@ def add_watch(watch_id):
     )
 
 
+# To be called periodically by client-side javacsript
+# while waiting for the watch to accept setup request
 @app.route("/getWatchSetupStatus/<watch_id>")
 @login_required
 def get_watch_setup_status(watch_id):
@@ -132,6 +138,38 @@ def get_watch_setup_status(watch_id):
         )
 
     return jsonify({"complete": False})
+
+
+# Changes the student data associated with the watch_id...
+# It should be noted that the current design is that the students have no collection
+# of their own, once a watch is added, the student data is stored with the watch data...
+# So the number of students the school can add equals the number of watches available...
+@app.route("/editStudentData/<watch_id>", methods=["GET", "POST"])
+@login_required
+def editStudentData(watch_id):
+    if current_user.user_data["accountType"] != "schoolAdmin":
+        return abort(401)
+
+    watch = firestoredb.get_watch(watch_id).to_dict()
+
+    if not watch.get("schoolName"):
+        return make_response("Watch is not active", 400)
+
+    if not watch["schoolName"] == current_user.user_data["schoolName"]:
+        return abort(401)
+
+    if request.method == "GET":
+        return render_template("editStudentData.html", watchId=watch_id)
+
+    elif request.method == "POST":
+        form = request.form
+
+        watch["studentName"] = form["studentName"]
+        watch["grade"] = form["grade"]
+
+        firestoredb.set_watch(watch_id, watch)
+
+        return redirect("/manageStudentWatches")
 
 
 @app.route("/cancelWatchSetupRequest/<watch_id>")

@@ -19,8 +19,13 @@ def recv_alert(watch_id, location):
         watch_data = firestoredb.get_watch(watch_id).to_dict()
         messaging_list = firestoredb.get_messaging_list(watch_data["schoolName"])
 
+        name = watch_data.get("studentName")
+
+        if not name:
+            name = "Name not set! watchId: " + watch_id
+
         for contact in messaging_list:
-            messaging.send_sms_alert(contact["phoneNumber"], watch_id, location)
+            messaging.send_sms_alert(contact["phoneNumber"], name, location)
 
         return "Alert recieved"
     else:

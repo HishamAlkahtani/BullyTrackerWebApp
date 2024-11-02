@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Student Data</title>
+    <link rel="stylesheet" href="/main.css" />
+    <style>
+      input,
+      button {
+        margin: 0.2em;
+        width: 97%;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="cardContainer">
+      <div class="mainCard">
+        <form action="/editStudentData/{{watchId}}" method="POST">
+          <input
+            type="text"
+            name="studentName"
+            placeholder="Student Name"
+          /><br />
+          <input type="text" name="grade" placeholder="Student Grade" /><br />
+          <button>Submit student data</button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
