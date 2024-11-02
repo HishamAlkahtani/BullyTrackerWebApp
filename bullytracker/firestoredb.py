@@ -18,12 +18,20 @@ def get_school(school_name):
 
 
 def get_messaging_list(school_name):
-    return get_school(school_name).to_dict()["messagingList"]
+    return get_school(school_name).to_dict().get("messagingList")
 
 
 def add_to_messaging_list(school_name, contact):
     school = get_school(school_name).to_dict()
-    school["messagingList"].append(contact)
+
+    messaging_list = school.get("messagingList")
+
+    if not messaging_list:
+        messaging_list = []
+
+    messaging_list.append(contact)
+
+    school.update({"messagingList": messaging_list})
     set_school(school_name, school)
 
 
@@ -127,7 +135,7 @@ def add_active_alert(watch_id, timestamp, location):
     else:
         active_alerts.append(alert)
 
-    school["activeAlerts"] = active_alerts
+    school.update({"activeAlerts": active_alerts})
 
     set_school(school_name, school)
     return True
@@ -139,7 +147,8 @@ def get_active_alerts(school_name):
 
 def clear_active_alerts(school_name):
     school_dict = get_school(school_name).to_dict()
-    school_dict.pop("activeAlerts")
+    if school_dict.get("activeAlerts"):
+        school_dict.pop("activeAlerts")
     set_school(school_name, school_dict)
 
 

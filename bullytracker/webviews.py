@@ -44,6 +44,10 @@ def get_manage_whatsapp_page():
         firestoredb.add_to_messaging_list(school_name, contact)
 
     messaging_list = firestoredb.get_messaging_list(school_name)
+
+    if not messaging_list:
+        messaging_list = []
+
     return render_template("manageWhatsappList.html", messaging_list=messaging_list)
 
 
