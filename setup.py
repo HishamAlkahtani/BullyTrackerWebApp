@@ -10,5 +10,6 @@ setup(
         "uuid",
         "firebase-admin",
         "twilio",
+        "shapely",
     ],
 )

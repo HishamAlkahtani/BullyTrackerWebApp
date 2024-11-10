@@ -1,32 +1,18 @@
 # Contains all the endpoints that the watch will make requests to
 
-from bullytracker import app, firestoredb, messaging
-from datetime import datetime
+from bullytracker import app, firestoredb, messaging, alerts
 from flask import jsonify, request, make_response
 import uuid
 
 
 # NOT THREAD SAFE! Change later, use firestore...? maybe cache active alerts?
-alerts = []
+# alerts = []
 
 
 # The app recieves alerts from the watch on this endpoint
-@app.route("/watchAPI/alert/<watch_id>/<location>")
-def recv_alert(watch_id, location):
-    if firestoredb.add_active_alert(watch_id, datetime.now(), location):
-        # add_active_alert checks that the watch is active and assigned to a school
-        # if it is a active, adds the alert to the school and returns true.
-        watch_data = firestoredb.get_watch(watch_id).to_dict()
-        messaging_list = firestoredb.get_messaging_list(watch_data["schoolName"])
-
-        name = watch_data.get("studentName")
-
-        if not name:
-            name = "Name not set! watchId: " + watch_id
-
-        for contact in messaging_list:
-            messaging.send_sms_alert(contact["phoneNumber"], name, location)
-
+@app.route("/watchAPI/alert/<watch_id>/<lat>/<long>")
+def recv_alert(watch_id, lat, long):
+    if alerts.process_alert(watch_id, lat, long):
         return "Alert recieved"
     else:
         return make_response("Alert failed", 400)

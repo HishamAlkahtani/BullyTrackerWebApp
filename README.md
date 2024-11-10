@@ -40,7 +40,8 @@ flask --app bullytracker run --debug
 - Cache layer vs in-memory data + some synch mechanism? will it be needed at all? or will the performance of just firestore be enough? what tasks can be cached? Look into flask_caching and redis
 - should active_alerts be cached?
 #### Geofencing
-- [ ] Geofencing: Figure out a way to determine if a student's coordinate are within a certain location
+- [X] Figure out a way to determine if a student's coordinate are within a certain location
+- [ ] Enable the school admin to add boundaries
 #### Watch App API
 - [X] Setup process (tentative):
     - [X] 1) Setup an endpoint for the watch app to call, it randomly generates a string id and checks firestore to see if the generated id already exists
@@ -51,4 +52,4 @@ flask --app bullytracker run --debug
 - [ ] Alert handling (after an alert is addressed, the alert is moved to the previousAlerts collection, and a report can be attached to the alert)
 - [ ] An endpoint to receive periodic updates from the watch (and where should they be stored?)
 ### Firebase
-- [ ] Geofencing: Figure out how the coordinates should be stored.
+- [X] Geofencing: Figure out how the coordinates should be stored.
