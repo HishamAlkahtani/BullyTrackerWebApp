@@ -15,7 +15,15 @@ def process_alert(watch_id, lat, long):
 
     school_name = watch.get("schoolName")
 
-    list_of_boundaries = firestoredb.get_school(school_name).to_dict().get("boundaries")
+    school = firestoredb.get_school(school_name)
+
+    if not school.exists:
+        return False
+
+    list_of_boundaries = school.to_dict().get("boundaries")
+
+    if not list_of_boundaries:
+        list_of_boundaries = []
 
     location = geofencing.determine_location(lat, long, list_of_boundaries)
 
