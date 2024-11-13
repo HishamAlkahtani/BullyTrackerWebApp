@@ -24,7 +24,6 @@ def home():
 @app.route("/clearAlerts")
 @login_required
 def clear_alerts():
-    alerts.clear()
     firestoredb.clear_active_alerts(current_user.user_data["schoolName"])
     return "List Cleared"
 
