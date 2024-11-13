@@ -12,7 +12,7 @@ import uuid
 # The app recieves alerts from the watch on this endpoint
 @app.route("/watchAPI/alert/<watch_id>/<lat>/<long>")
 def recv_alert(watch_id, lat, long):
-    if alerts.process_alert(watch_id, lat, long):
+    if alerts.process_alert(watch_id, float(lat), float(long)):
         return "Alert recieved"
     else:
         return make_response("Alert failed", 400)

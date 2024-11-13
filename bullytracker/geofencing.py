@@ -6,11 +6,14 @@ from shapely.geometry import Polygon, Point
 # by the school, the name of the boundary is returned
 # otherwise, a google maps link to the location is returned.
 def determine_location(lat, long, list_of_boundaries):
+    if lat == 0.0 and long == 0.0:
+        return "Location Unavailable!"
+
     for boundary in list_of_boundaries:
         if boundary_contains(lat, long, boundary.get("coords")):
             return boundary.get("name")
 
-    return "https://www.google.com/maps/search/?api=1&query=" + lat + "," + long
+    return "https://www.google.com/maps/search/?api=1&query=" + str(lat) + "," + str(long)
 
 
 # Determines if the given location determined by latitude and longitude
