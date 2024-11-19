@@ -4,7 +4,7 @@ Repo for the web app part of bully tracker
 
 ## Build Intsructions
 
-To run the app on your machine, you must have python, pip, and git installed. You must also have the cred.json file. Run the following in the terminal:
+To run the app on your machine, you must have python, pip, and git installed. You must also have the credential files. Run the following in the terminal:
 
 ```shell
 git clone "https://github.com/HishamAlkahtani/BullyTrackerWebApp"
@@ -17,7 +17,7 @@ flask --app bullytracker run --debug
 
 ### Front End
 - [X] Link login/register pages to firebase authentication
-- [ ] Client side form validation on all forms
+- [ ] Client side form validation on all forms!!
 - [ ] Make the school name field in the parent registration form a drop down menu that shows available schools
 - [ ] Remove the username field from the register page, as it is useless. A full name field will be more useful.
 - [ ] Proper error messages when register fails

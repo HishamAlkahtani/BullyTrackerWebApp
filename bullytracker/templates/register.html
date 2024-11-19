@@ -26,28 +26,33 @@
     </style>
   </head>
   <body>
-    <div class="cardContainer">
-      <div class="mainCard">
-        <form action="/register" method="POST">
-          <input type="text" name="username" placeholder="username" />
-          <input type="text" name="email" placeholder="email" />
-          <input type="text" name="password" placeholder="password" />
-          <select
-            name="accountType"
-            id="accountType"
-            placeholder="Account type"
-          >
-            <option value="schoolAdmin">School Admin</option>
-            <option value="parentAccount">Parent Account</option>
-          </select>
-          <input
-            type="text"
-            name="schoolName"
-            id="schoolName"
-            placeholder="School Name"
-          />
-          <button>Register</button>
-        </form>
+    <div class="verticalCenter">
+      <div style="width: 100%">
+        <h1 class="center">Register</h1>
+        <div class="cardContainer">
+          <div class="mainCard">
+            <form action="/register" method="POST">
+              <input type="text" name="username" placeholder="username" />
+              <input type="email" name="email" placeholder="email" />
+              <input type="password" name="password" placeholder="password" />
+              <select
+                name="accountType"
+                id="accountType"
+                placeholder="Account type"
+              >
+                <option value="schoolAdmin">School Admin</option>
+                <option value="parentAccount">Parent Account</option>
+              </select>
+              <input
+                type="text"
+                name="schoolName"
+                id="schoolName"
+                placeholder="School Name"
+              />
+              <button>Register</button>
+            </form>
+          </div>
+        </div>
       </div>
     </div>
     {% if failed %} failed to Register {% endif %}

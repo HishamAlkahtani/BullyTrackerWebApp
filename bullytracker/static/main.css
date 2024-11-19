@@ -4,6 +4,24 @@ body {
     font-family: 'Aileron', sans-serif;
     background: #00b2b2;
     color: white;
+    height: 100%;
+}
+
+input,
+button {
+  margin-top: 1em;
+  border-radius: 1em;
+  padding: 0.5em;
+  border: none;
+}
+
+input {
+    background: rgb(247, 247, 247);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
 }
 
 .center {
@@ -20,7 +38,7 @@ body {
     height: 100%;
     border-radius: 1em;
     margin: .5em;
-    padding: 0.6em;
+    padding: 0.8em;
 }
 
 .subCard {
@@ -30,9 +48,17 @@ body {
     box-sizing: border-box;
     background-color: rgb(230, 230, 230);
     border-radius: 1em;
-    margin: 0.3em;
-    padding: 0.3em;
+    margin-bottom: 0.5em;
+    padding: 0.8em;
 }
+
+.verticalCenter {
+    height: 85vh;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
 .cardContainer {
     display: flex;
     justify-content: space-around;
@@ -81,4 +107,12 @@ td {
     -webkit-box-shadow: 0px 5px 0px 0px rgb(230, 230, 230);
     -moz-box-shadow: 0px 5px 0px 0px rgb(230, 230, 230);
     box-shadow: 0px 5px 0px 0px rgb(230, 230, 230);
+}
+
+/* Mobile CSS */
+
+@media only screen and (max-width: 800px) {
+ .cardContainer {
+    flex-direction:  column;
+ }   
 }
