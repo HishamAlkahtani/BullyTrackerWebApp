@@ -82,3 +82,4 @@ def check_setup_status(watch_id):
 def get_watch_location_update(watch_id, latitude, longitude, timestamp):
     print ("LOCATION UPDATE RECEIVED!")
     print(str(watch_id) + " " + str(latitude) + " " + str(longitude) + " " + str(timestamp))
+    return "Location update recieved"
