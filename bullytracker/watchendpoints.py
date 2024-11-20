@@ -77,3 +77,8 @@ def check_setup_status(watch_id):
             # remove old school name, thereby canceling the setup request
             firestoredb.set_watch(watch_id, not_active_empty_watch)
             return jsonify(not_active_empty_watch)
+
+@app.route("/watchAPI/locationUpdate/<watch_id>/<latitude>/<longitude>/<timestamp>")
+def get_watch_location_update(watch_id, latitude, longitude, timestamp):
+    print ("LOCATION UPDATE RECEIVED!")
+    print(str(watch_id) + " " + str(latitude) + " " + str(longitude) + " " + str(timestamp))
