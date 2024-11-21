@@ -78,8 +78,33 @@ def check_setup_status(watch_id):
             firestoredb.set_watch(watch_id, not_active_empty_watch)
             return jsonify(not_active_empty_watch)
 
+
 @app.route("/watchAPI/locationUpdate/<watch_id>/<latitude>/<longitude>/<timestamp>")
 def get_watch_location_update(watch_id, latitude, longitude, timestamp):
-    print ("LOCATION UPDATE RECEIVED!")
-    print(str(watch_id) + " " + str(latitude) + " " + str(longitude) + " " + str(timestamp))
+    print("LOCATION UPDATE RECEIVED!")
+    print(
+        str(watch_id)
+        + " "
+        + str(latitude)
+        + " "
+        + str(longitude)
+        + " "
+        + str(timestamp)
+    )
+
+    watch = firestoredb.get_watch(watch_id).to_dict()
+
+    if not watch.get("isActive") or not watch.get("schoolName"):
+        return "Watch not active"
+
+    last_location = {
+        "lat": float(latitude),
+        "long": float(longitude),
+        "timestamp": timestamp,
+    }
+
+    watch.update({"lastLocation": last_location})
+
+    firestoredb.set_watch(watch_id, watch)
+
     return "Location update recieved"

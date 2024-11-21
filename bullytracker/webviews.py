@@ -2,8 +2,7 @@
 
 from flask import render_template, request, jsonify, abort, make_response, redirect
 from bullytracker import app
-from bullytracker.watchendpoints import alerts
-from bullytracker import firestoredb
+from bullytracker import firestoredb, geofencing
 from flask_login import login_required, current_user
 
 
@@ -11,11 +10,63 @@ from flask_login import login_required, current_user
 @login_required
 def home():
     if current_user.user_data["accountType"] == "schoolAdmin":
-        # should active alerts be cached?
+        # Fetch active alerts
         alerts = firestoredb.get_active_alerts(current_user.user_data["schoolName"])
         if not alerts:
             alerts = []
-        return render_template("adminDashboard.html", alertList=alerts)
+
+        # Fetch and process student locations
+
+        list_of_boundaries = (
+            firestoredb.get_school(current_user.user_data["schoolName"])
+            .to_dict()
+            .get("boundaries")
+        )
+
+        if not list_of_boundaries:
+            list_of_boundaries = []
+
+        watches = firestoredb.get_watches_by_school_name(
+            current_user.user_data["schoolName"]
+        )
+
+        locations = []
+
+        for watch in watches:
+            last_location = watch.get("lastLocation")
+
+            if last_location:
+                location = geofencing.determine_location(
+                    last_location.get("lat"),
+                    last_location.get("long"),
+                    list_of_boundaries,
+                )
+
+                watch.update({"location": location})
+                watch.update({"lastSeen": last_location.get("timestamp")})
+
+                if location != "Unavailable":
+                    watch.update(
+                        {
+                            "locationLink": geofencing.get_google_maps_link(
+                                last_location.get("lat"), last_location.get("long")
+                            )
+                        }
+                    )
+            else:
+                watch.update({"location": "Unavailable"})
+                watch.update({"lastSeen": ""})
+
+            if not watch.get("studentName"):
+                watch.update(
+                    {"studentName": "Name not set! watch id: " + watch["watchId"]}
+                )
+
+            locations.append(watch)
+
+        return render_template(
+            "adminDashboard.html", alertList=alerts, studentLocations=locations
+        )
 
     elif current_user.user_data["accountType"] == "parentAccount":
         return render_template("parentDashboard.html")

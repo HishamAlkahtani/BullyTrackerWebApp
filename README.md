@@ -23,7 +23,7 @@ flask --app bullytracker run --debug
 - [ ] Proper error messages when register fails
 - [ ] Geofencing: Figure out how the map UI will work
 - [ ] Parent dashboard
-- [ ] Whatsapp list page: the page that allows the school admin to add/remove numbers from the messaging list that will recieve the alerts
+- [X] Whatsapp list page: the page that allows the school admin to add/remove numbers from the messaging list that will recieve the alerts
 - [X] Watch Setup Page Prototype 
 - Should the entire watch setup page be refreshed every time period to update the watch statuses or 
 ### Back End
@@ -50,6 +50,6 @@ flask --app bullytracker run --debug
     - [X] 4) On the display of the watch, a prompt is shown, if YES is clicked on the watch, the setup process is now complete, and the watch is now active.
 - [X] Store received alerts from watch in DB
 - [ ] Alert handling (after an alert is addressed, the alert is moved to the previousAlerts collection, and a report can be attached to the alert)
-- [ ] An endpoint to receive periodic updates from the watch (and where should they be stored?)
+- [X] An endpoint to receive periodic updates from the watch (and where should they be stored?)
 ### Firebase
 - [X] Geofencing: Figure out how the coordinates should be stored.
