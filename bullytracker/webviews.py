@@ -4,6 +4,7 @@ from flask import render_template, request, jsonify, abort, make_response, redir
 from bullytracker import app
 from bullytracker import firestoredb, geofencing
 from flask_login import login_required, current_user
+import json
 
 
 @app.route("/")
@@ -124,7 +125,17 @@ def manage_student_watches_page():
 @app.route("/manageSchoolBoundaries")
 @login_required
 def manage_school_boundaries():
-    return render_template("manageSchoolBoundaries.html")
+    if current_user.user_data["accountType"] != "schoolAdmin":
+        return abort(401)
+
+    school_name = current_user.user_data["schoolName"]
+    school = firestoredb.get_school(school_name).to_dict()
+    boundaries = school.get("boundaries")
+
+    if not boundaries:
+        boundaries = []
+
+    return render_template("manageSchoolBoundaries.html", boundaries=boundaries)
 
 
 @app.route("/manageSchoolBoundaries/clearBoundaries", methods=["POST"])

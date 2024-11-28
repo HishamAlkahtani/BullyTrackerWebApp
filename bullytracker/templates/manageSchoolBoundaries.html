@@ -3,7 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Bully Tracker</title>
+    <link rel="icon" type="image/x-icon" href="/logoblue.png" />
+    <title>Manage School Boundaries</title>
     <link
       rel="stylesheet"
       href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
@@ -46,6 +47,7 @@
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
     <script>
+      let boundaries = {{ boundaries|tojson|safe }};
       let map;
       const gridCells = [];
       let drawControl;
@@ -86,15 +88,36 @@
         map.on(L.Draw.Event.CREATED, function (event) {
           addGridCell(event.layer);
         });
+
+        initPreviouslySetBoundaries();
       }
 
-      function addGridCell(cell) {
+      function initPreviouslySetBoundaries() {
+        for (const boundary of boundaries) {
+          let cell = L.polygon(
+            boundary.coords.map((coord) => [coord.lat, coord.long]),
+            {
+              color: "ff0000",
+              weight: 2,
+              fillColor: "Yellow",
+              fillOpacity: 0.5,
+            }
+          );
+          addGridCell(cell, boundary.name);
+        }
+      }
+
+      function addGridCell(cell, classroomName) {
         cell.addTo(map);
         gridCells.push(cell);
-
-        cell.bindPopup(createPopupContent(cell));
+        if (classroomName) {
+          cell.setStyle({ fillColor: "yellow", fillOpacity: 0.5 });
+          cell.bindPopup(`Classroom: ${classroomName}`);
+          cell.roomName = classroomName;
+        } else {
+          cell.bindPopup(createPopupContent(cell));
+        }
       }
-
       function createPopupContent(cell) {
         const container = document.createElement("div");
 
