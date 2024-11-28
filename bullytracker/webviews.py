@@ -7,6 +7,12 @@ from flask_login import login_required, current_user
 import json
 
 
+@app.route("/getActiveAlerts")
+@login_required
+def get_active_alerts():
+    return jsonify(firestoredb.get_active_alerts(current_user.user_data["schoolName"]))
+
+
 @app.route("/")
 @login_required
 def home():

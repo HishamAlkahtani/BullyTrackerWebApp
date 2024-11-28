@@ -76,6 +76,8 @@
         <div class="subCard">
           <h2 class="center">Active Alerts</h2>
         </div>
+        <div id="activeAlertsContainer"></div>
+        <!--
         {% for alert in alertList %}
         <div class="subCard">
           <h3>SOS Alert!</h3>
@@ -87,6 +89,7 @@
           {% else %} {{alert.location}} {% endif %}
         </div>
         {% endfor %}
+        -->
         <button onclick="clearAlerts()">Clear Alerts</button>
       </div>
       <div class="mainCard">
@@ -129,6 +132,78 @@
         document.getElementById("sideNav").style.display = "block";
         document.getElementById("showSideNavImg").style.display = "none";
       }
+
+      function createActiveAlertElement(
+        studentName,
+        timestamp,
+        location,
+        locationLink
+      ) {
+        // Create the container div
+        const subCard = document.createElement("div");
+        subCard.classList.add("subCard");
+
+        // Add the header
+        const header = document.createElement("h3");
+        header.textContent = "SOS Alert!";
+        subCard.appendChild(header);
+
+        // Add the student name
+        const studentNameElement = document.createElement("b");
+        studentNameElement.textContent = "Student Name: ";
+        subCard.appendChild(studentNameElement);
+        subCard.appendChild(document.createTextNode(studentName));
+        subCard.appendChild(document.createElement("br"));
+
+        // Add the timestamp
+        const timestampElement = document.createElement("b");
+        timestampElement.textContent = "Timestamp: ";
+        subCard.appendChild(timestampElement);
+        subCard.appendChild(document.createTextNode(timestamp));
+        subCard.appendChild(document.createElement("br"));
+
+        // Add the location
+        const locationElement = document.createElement("b");
+        locationElement.textContent = "Location: ";
+        subCard.appendChild(locationElement);
+
+        if (locationLink) {
+          const link = document.createElement("a");
+          link.href = locationLink;
+          link.textContent = location;
+          subCard.appendChild(link);
+        } else {
+          subCard.appendChild(document.createTextNode(location));
+        }
+
+        return subCard;
+      }
+
+      function fetchAndRenderActiveAlerts() {
+        let activeAlerts = document.getElementById("activeAlertsContainer");
+        fetch("/getActiveAlerts", { credentials: "include" })
+          .then((response) => {
+            return response.json();
+          })
+          .then((alerts) => {
+            activeAlerts.replaceChildren();
+            for (let i in alerts) {
+              let alert = alerts[i];
+              if (!alert.studentName)
+                alert.studentName = "Name not set! WatchId: " + alert.watchId;
+              let alertElement = createActiveAlertElement(
+                alert.studentName,
+                alert.timestamp,
+                alert.location,
+                alert.locationLink
+              );
+              activeAlerts.appendChild(alertElement);
+            }
+          });
+      }
+
+      fetchAndRenderActiveAlerts();
+      setInterval(fetchAndRenderActiveAlerts, 5000);
     </script>
   </body>
 </html>
