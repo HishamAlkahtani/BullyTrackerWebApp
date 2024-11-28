@@ -1,6 +1,8 @@
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore, initialize_app
+from datetime import datetime
+import pytz
 
 # cred.json is NOT included in the repo!
 cred = credentials.Certificate("cred.json")
@@ -181,3 +183,15 @@ def add_boundary_to_school(school_name, boundary):
     school.update({"boundaries": boundaries})
 
     set_school(school_name, school)
+
+
+def get_timestamp_now():
+    time = datetime.now(pytz.timezone("Asia/Riyadh"))
+    return "%d-%d-%d %d:%02d:%02d" % (
+        time.year,
+        time.month,
+        time.day,
+        time.hour,
+        time.minute,
+        time.second,
+    )

@@ -79,6 +79,8 @@ def check_setup_status(watch_id):
             return jsonify(not_active_empty_watch)
 
 
+# Provided timestamp by the watch is ignored due to timezone issues, server time is used
+# with the location update
 @app.route("/watchAPI/locationUpdate/<watch_id>/<latitude>/<longitude>/<timestamp>")
 def get_watch_location_update(watch_id, latitude, longitude, timestamp):
     print("LOCATION UPDATE RECEIVED!")
@@ -100,7 +102,7 @@ def get_watch_location_update(watch_id, latitude, longitude, timestamp):
     last_location = {
         "lat": float(latitude),
         "long": float(longitude),
-        "timestamp": timestamp,
+        "timestamp": firestoredb.get_timestamp_now(),
     }
 
     watch.update({"lastLocation": last_location})

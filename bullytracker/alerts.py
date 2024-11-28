@@ -33,7 +33,7 @@ def process_alert(watch_id, lat, long):
         location_link = None
 
     if not firestoredb.add_active_alert(
-        watch_id, datetime.now(), location, location_link
+        watch_id, firestoredb.get_timestamp_now(), location, location_link
     ):
         return False
 
