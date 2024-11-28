@@ -39,6 +39,10 @@ form {
     border-radius: 1em;
     margin: .5em;
     padding: 0.8em;
+    max-width: 800px;
+    -webkit-box-shadow: 0px 0px 11px 5px rgba(0,0,0,0.12);
+    -moz-box-shadow: 0px 0px 11px 5px rgba(0,0,0,0.12);
+    box-shadow: 0px 0px 11px 5px rgba(0,0,0,0.12);
 }
 
 .subCard {
@@ -80,35 +84,46 @@ td {
 
 .sideNavButton {
     width: 2em;
-    left: 1em;
-    top: 1em;
+    left: 1.5em;
+    top: 1.6em;
     position: absolute
 }
 
 .hoverPointer:hover {
     cursor: pointer;
 }
+
 .sideNav {
     position: absolute;
     display: none;
-    background:rgb(230, 230, 230);
+    background:rgb(255, 255, 255);
     height: 100%;
     left: 0px;
     top: 0px;
     padding: 1em;
+    -webkit-box-shadow: 0px 0px 11px 5px rgba(0,0,0,0.12);
+    -moz-box-shadow: 0px 0px 11px 5px rgba(0,0,0,0.12);
+    box-shadow: 0px 0px 11px 5px rgba(0,0,0,0.12);
 }
 
 .topNav {
+    padding: .5em;
     width:100%;
     top: 0px;
     float:right;
     background: white;
     color: black;
-    margin-bottom: 1em;
-    -webkit-box-shadow: 0px 5px 0px 0px rgb(230, 230, 230);
-    -moz-box-shadow: 0px 5px 0px 0px rgb(230, 230, 230);
-    box-shadow: 0px 5px 0px 0px rgb(230, 230, 230);
+    margin-bottom: 1.5em;
+    -webkit-box-shadow: 0px 0px 11px 5px rgba(0,0,0,0.12);
+    -moz-box-shadow: 0px 0px 11px 5px rgba(0,0,0,0.12);
+    box-shadow: 0px 0px 11px 5px rgba(0,0,0,0.12);
 }
+
+.inputLabel {
+    margin-top: 0.85em;
+    padding-left: 0.35em;
+    font-weight: 600;
+  }
 
 /* Mobile CSS */
 

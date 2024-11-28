@@ -27,11 +27,19 @@ def process_alert(watch_id, lat, long):
 
     location = geofencing.determine_location(lat, long, list_of_boundaries)
 
-    if not firestoredb.add_active_alert(watch_id, datetime.now(), location):
+    if location != "Unavailable":
+        location_link = geofencing.get_google_maps_link(lat, long)
+    else:
+        location_link = None
+
+    if not firestoredb.add_active_alert(
+        watch_id, datetime.now(), location, location_link
+    ):
         return False
 
     # add_active_alert checks that the watch is active and assigned to a school
     # if it is a active, adds the alert to the school and returns true.
+
     watch_data = firestoredb.get_watch(watch_id).to_dict()
     messaging_list = firestoredb.get_messaging_list(watch_data["schoolName"])
 
@@ -40,7 +48,12 @@ def process_alert(watch_id, lat, long):
     if not name:
         name = "Name not set! watchId: " + watch_id
 
+    location_message = location
+
+    if location_link and location_link != location:
+        location_message = location_message + ". Link: " + location_link
+
     for contact in messaging_list:
-        messaging.send_sms_alert(contact["phoneNumber"], name, location)
+        messaging.send_sms_alert(contact["phoneNumber"], name, location_message)
 
     return True

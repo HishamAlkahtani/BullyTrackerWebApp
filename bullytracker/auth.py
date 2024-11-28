@@ -50,31 +50,39 @@ def login():
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
-        form = request.form
-        user = {
-            "username": form["username"],
-            "email": form["email"],
-            "password": form["password"],
-            "accountType": form["accountType"],
-            "schoolName": form["schoolName"],
-        }
-
-        # Register the user to firebase authentication
-        auth.create_user(
-            **{
-                "uid": user["username"],
-                "password": user["password"],
-                "email": user["email"],
+        try:
+            form = request.form
+            user = {
+                "username": form["username"],
+                "email": form["email"],
+                "password": form["password"],
+                "accountType": form["accountType"],
+                "schoolName": form["schoolName"],
             }
-        )
 
-        # Store relevant user information in firestore
-        user.pop("password")  # Password not needed in db, remove it
-        if not firestoredb.add_user(user):
-            auth.delete_user(user["username"])
-            return render_template("register.html", failed=True)
+            # Register the user to firebase authentication
+            auth.create_user(
+                **{
+                    "uid": user["username"],
+                    "password": user["password"],
+                    "email": user["email"],
+                }
+            )
 
-        return redirect("/login")
+            # Store relevant user information in firestore
+            user.pop("password")  # Password not needed in db, remove it
+            if not firestoredb.add_user(user):
+                auth.delete_user(user["username"])
+                return render_template(
+                    "register.html",
+                    failed=True,
+                    failure_message="An unexpected error has occurred",
+                )
+
+            return redirect("/login")
+
+        except Exception as e:
+            return render_template("register.html", failed=True, failure_message=str(e))
     else:
         return render_template("register.html")
 

@@ -31,30 +31,64 @@
         <h1 class="center">Register</h1>
         <div class="cardContainer">
           <div class="mainCard">
-            <form action="/register" method="POST">
+            <form
+              id="registerForm"
+              action="/register"
+              method="POST"
+              onsubmit="validate()"
+            >
+              <div class="inputLabel">Username</div>
               <input type="text" name="username" placeholder="username" />
+              <div class="inputLabel">E-mail</div>
               <input type="email" name="email" placeholder="email" />
-              <input type="password" name="password" placeholder="password" />
-              <select
+              <div class="inputLabel">Password</div>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="password"
+              />
+              <div class="inputLabel">Confirm Password</div>
+              <input
+                type="password"
+                id="confirmPassword"
+                placeholder="password"
+              />
+              <input
+                type="hidden"
                 name="accountType"
                 id="accountType"
                 placeholder="Account type"
-              >
-                <option value="schoolAdmin">School Admin</option>
-                <option value="parentAccount">Parent Account</option>
-              </select>
+                value="schoolAdmin"
+              />
+              <div class="inputLabel">School Name</div>
               <input
                 type="text"
                 name="schoolName"
                 id="schoolName"
                 placeholder="School Name"
               />
-              <button>Register</button>
+              <button type="button" onclick="validateAndSubmitForm()">
+                Register
+              </button>
             </form>
           </div>
         </div>
       </div>
     </div>
-    {% if failed %} failed to Register {% endif %}
+    <script>
+      function validateAndSubmitForm(event) {
+        let form = document.getElementById("registerForm");
+        let password = document.getElementById("password").value;
+        let confirmPassword = document.getElementById("confirmPassword").value;
+        if (password == confirmPassword) form.submit();
+        else alert("Passwords don't match!");
+      }
+    </script>
+    <script>
+      {% if failed %}
+        alert("{{ failure_message }}")
+      {% endif %}
+    </script>
   </body>
 </html>

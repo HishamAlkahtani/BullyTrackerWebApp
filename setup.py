@@ -11,5 +11,6 @@ setup(
         "firebase-admin",
         "twilio",
         "shapely",
+        "flask-cors",
     ],
 )

@@ -106,11 +106,12 @@ def get_watches_by_school_name(school_name):
 
 
 # Active alerts are stored directly in school document
-def add_active_alert(watch_id, timestamp, location):
+def add_active_alert(watch_id, timestamp, location, location_link):
     alert = {
         "watchId": watch_id,
         "timestamp": timestamp,
         "location": location,
+        "locationLink": location_link,
     }
 
     watch_doc = get_watch(watch_id)
@@ -165,3 +166,18 @@ def set_watch(watch_id, dict):
 
 def add_watch(watch_id):
     watch_collection.document(watch_id).set({"isActive": False})
+
+
+def add_boundary_to_school(school_name, boundary):
+    school = get_school(school_name).to_dict()
+
+    boundaries = school.get("boundaries")
+
+    if not boundaries:
+        boundaries = []
+
+    boundaries.append(boundary)
+
+    school.update({"boundaries": boundaries})
+
+    set_school(school_name, school)

@@ -121,6 +121,44 @@ def manage_student_watches_page():
     return render_template("manageStudentWatches.html", watch_list=watches)
 
 
+@app.route("/manageSchoolBoundaries")
+@login_required
+def manage_school_boundaries():
+    return render_template("manageSchoolBoundaries.html")
+
+
+@app.route("/manageSchoolBoundaries/clearBoundaries", methods=["POST"])
+@login_required
+def clear_school_boundaries():
+    school_name = current_user.user_data["schoolName"]
+
+    school = firestoredb.get_school(school_name).to_dict()
+
+    school.update({"boundaries": []})
+
+    firestoredb.set_school(school_name, school)
+
+    return redirect("/manageSchoolBoundaries")
+
+
+@app.route("/setCoordinates", methods=["POST", "GET"])
+@login_required
+def add_room_to_school_boundaries():
+    if not current_user.user_data["accountType"] == "schoolAdmin":
+        return abort(401)
+
+    boundary = request.json
+    print(boundary)
+
+    school_name = current_user.user_data["schoolName"]
+
+    firestoredb.add_boundary_to_school(school_name, boundary)
+
+    response = jsonify({"msg": "success"})
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    return response
+
+
 # Initiates the setup process by setting the appropriate fields
 # The watch then will read the data from firestore, and communicate
 # it's response by setting the appropriate fields

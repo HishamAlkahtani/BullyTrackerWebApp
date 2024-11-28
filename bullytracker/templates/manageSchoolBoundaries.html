@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bully Tracker</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css"
+    />
+    <link rel="stylesheet" href="/main.css" />
+    <style>
+      #map {
+        height: 500px;
+        width: 90%;
+        max-width: 1000px;
+        margin: 20px auto;
+        border: 2px solid #007a77;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="verticalCenter">
+      <div style="width: 100%">
+        <div class="cardContainer">
+          <div class="mainCard">
+            <h2 class="center">Manage School Boundaries</h2>
+            <div id="map"></div>
+            <form
+              action="/manageSchoolBoundaries/clearBoundaries"
+              method="POST"
+            >
+              <button onclick="deleteGrid()">Reset school boundaries</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+    <script>
+      let map;
+      const gridCells = [];
+      let drawControl;
+
+      function initMap() {
+        map = L.map("map").setView([24.726407, 46.624275], 13);
+
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          maxZoom: 19,
+          attribution: "© OpenStreetMap",
+        }).addTo(map);
+
+        // Initialize Leaflet Draw controls for polygons
+        drawControl = new L.Control.Draw({
+          draw: {
+            polygon: {
+              allowIntersection: false, // Disallow intersecting lines
+              showArea: true, // Show the area of the polygon while drawing
+              shapeOptions: {
+                color: "#ff0000",
+                weight: 2,
+              },
+              metric: true, // Use metric units
+            },
+            rectangle: false,
+            polyline: false,
+            circle: false,
+            marker: false,
+            circlemarker: false,
+          },
+          edit: {
+            featureGroup: new L.FeatureGroup(),
+          },
+        });
+        map.addControl(drawControl);
+
+        // Event listener for finished drawing events
+        map.on(L.Draw.Event.CREATED, function (event) {
+          addGridCell(event.layer);
+        });
+      }
+
+      function addGridCell(cell) {
+        cell.addTo(map);
+        gridCells.push(cell);
+
+        cell.bindPopup(createPopupContent(cell));
+      }
+
+      function createPopupContent(cell) {
+        const container = document.createElement("div");
+
+        // Assign Classroom button
+        const assignButton = document.createElement("button");
+        assignButton.innerText = "Assign Classroom";
+        assignButton.onclick = () => assignClassroom(cell);
+
+        // Delete button
+        const deleteButton = document.createElement("button");
+        deleteButton.innerText = "Delete";
+        deleteButton.style.marginLeft = "10px";
+        deleteButton.onclick = () => deleteCell(cell);
+
+        container.appendChild(assignButton);
+        container.appendChild(deleteButton);
+
+        return container;
+      }
+
+      function assignClassroom(cell) {
+        const classroomName = prompt("Enter classroom name:");
+        if (classroomName) {
+          cell.setStyle({ fillColor: "yellow", fillOpacity: 0.5 });
+          cell.bindPopup(`Classroom: ${classroomName}`).openPopup();
+
+          // Sending coordinates and their label to backend, and saving the grid...
+          const coordinates = cell.toGeoJSON().geometry.coordinates[0];
+          sendCoordinatesToBackend(coordinates, classroomName);
+          cell.roomName = classroomName;
+        }
+      }
+
+      function deleteCell(cell) {
+        map.removeLayer(cell); // Remove the cell from the map
+        const index = gridCells.indexOf(cell);
+        if (index > -1) {
+          gridCells.splice(index, 1); // Remove the cell from the gridCells array
+        }
+      }
+
+      function deleteGrid() {
+        if (confirm("Are you sure you want to delete the entire grid?")) {
+          gridCells.forEach((cell) => map.removeLayer(cell)); // Remove each cell from the map
+          gridCells.length = 0; // Clear the gridCells array
+        }
+      }
+
+      function sendCoordinatesToBackend(coordinates, roomName) {
+        console.log("sending coords of: " + roomName);
+        const formattedCoordinates = coordinates.map((coord) => ({
+          lat: coord[1], // Latitude
+          long: coord[0], // Longitude
+        }));
+
+        fetch("/setCoordinates", {
+          // Use your Flask server's URL
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            coords: formattedCoordinates,
+            name: roomName,
+          }),
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Network response was not ok");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            console.log("Coordinates sent successfully:", data);
+          })
+          .catch((error) => {
+            console.error("Error sending coordinates:", error);
+          });
+      }
+
+      window.onload = initMap;
+    </script>
+  </body>
+</html>

@@ -15,6 +15,24 @@
         box-shadow: inset 0px 0px 10px 1px rgba(0, 0, 0, 0.2);
         border-radius: 0.5em;
       }
+      a.navOptions {
+        text-decoration: none;
+        color: black;
+      }
+      div.navOptions {
+        color: black;
+        display: block;
+        width: 99%;
+        box-sizing: border-box;
+        background-color: rgb(240, 239, 239);
+        border-radius: 1em;
+        margin-bottom: 0.5em;
+        margin-top: 0.5em;
+        padding: 0.5em;
+        border-radius: 0.5em;
+        font-size: 18px;
+        text-align: center;
+      }
     </style>
   </head>
   <body>
@@ -25,11 +43,22 @@
         class="hoverPointer"
         style="width: 2em"
         onclick="hideSideNav()"
-      /><br /><a href="/manageStudentWatches">Manage Students and Watches</a
-      ><br />
-      <a href="/manageSchoolBoundaries">Manage School Boundaries</a><br />
-      <a href="/manageWhatsappList">Manage Whatsapp Notification List</a><br />
-      <a href="/logout">logout</a>
+      /><br /><br />
+      <a class="navOptions" href="/manageStudentWatches">
+        <div class="navOptions">Manage Students and Watches</div>
+      </a>
+
+      <a class="navOptions" href="/manageSchoolBoundaries"
+        ><div class="navOptions">Manage School Boundaries</div>
+      </a>
+
+      <a class="navOptions" href="/manageWhatsappList"
+        ><div class="navOptions">Manage Whatsapp Notification List</div>
+      </a>
+
+      <a class="navOptions" href="/logout"
+        ><div class="navOptions">Log out</div>
+      </a>
     </div>
     <nav class="topNav">
       <h1 class="center">Bully Tracker</h1>
@@ -49,9 +78,12 @@
         {% for alert in alertList %}
         <div class="subCard">
           <h3>SOS Alert!</h3>
-          Student Name: {{alert.studentName}}<br />
-          timestamp: {{alert.timestamp}}<br />
-          location: {{alert.location}}
+          <b>Student Name:</b> {{alert.studentName}}<br />
+          <b>Timestamp:</b> {{alert.timestamp}}<br />
+          <b>Location:</b>
+          {% if 'locationLink' in alert and alert.locationLink is not none %}
+          <a href="{{alert.locationLink}}">{{alert.location}}</a>
+          {% else %} {{alert.location}} {% endif %}
         </div>
         {% endfor %}
         <button onclick="clearAlerts()">Clear Alerts</button>

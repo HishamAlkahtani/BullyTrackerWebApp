@@ -45,58 +45,60 @@
     </style>
   </head>
   <body>
-    <div class="verticalCenter">
-      <div style="width: 100%">
-        <div class="popup mainCard hidden" id="addWatchCard" hidden="true">
-          <h2>Add a new watch</h2>
-          <h3 class="center hidden" id="addWatchTitle"></h3>
-          <p class="center hidden" id="addWatchBody"></p>
-          <p style="color: gray">
-            Download and launch the Bully Tracker Watch App, and enter the
-            watchId displayed on the screen.
-          </p>
-          <input
-            type="text"
-            name="watchId"
-            id="watchIdField"
-            placeholder="watchId"
-          />
-          <button onclick="requestToAddWatch()">Add watch</button>
-          <button onclick="cancelAddWatch()">Cancel</button>
-        </div>
-        <div class="cardContainer">
-          <div class="mainCard">
-            <h2>Watches and Students</h2>
-            <div class="subCard">
-              <table>
-                <tr>
-                  <th>Watch Id</th>
-                  <th>Student Info</th>
-                  <th>Watch Is Active</th>
-                  <th></th>
-                  <th></th>
-                </tr>
-                {% for watch in watch_list %}
-                <tr>
-                  <td>{{ watch.watchId }}</td>
-                  <td>
-                    Name: {{ watch.studentName }}<br />
-                    Grade: {{ watch.grade }}
-                  </td>
-                  <td>{{watch.isActive}}</td>
-                  <td>
-                    <a href="/editStudentData/{{watch.watchId}}">
-                      Edit Student Data</a
-                    >
-                  </td>
-                  <td>
-                    <a href="/removeWatch/{{watch.watchId}}">Remove Watch</a>
-                  </td>
-                </tr>
-                {% endfor %}
-              </table>
+    <div class="cardContainer">
+      <div class="verticalCenter">
+        <div style="width: 100%">
+          <div class="popup mainCard hidden" id="addWatchCard" hidden="true">
+            <h2>Add a new watch</h2>
+            <h3 class="center hidden" id="addWatchTitle"></h3>
+            <p class="center hidden" id="addWatchBody"></p>
+            <p style="color: gray">
+              Download and launch the Bully Tracker Watch App, and enter the
+              watchId displayed on the screen.
+            </p>
+            <input
+              type="text"
+              name="watchId"
+              id="watchIdField"
+              placeholder="watchId"
+            />
+            <button onclick="requestToAddWatch()">Add watch</button>
+            <button onclick="cancelAddWatch()">Cancel</button>
+          </div>
+          <div class="cardContainer">
+            <div class="mainCard">
+              <h2>Watches and Students</h2>
+              <div class="subCard">
+                <table>
+                  <tr>
+                    <th>Watch Id</th>
+                    <th>Student Info</th>
+                    <th>Watch Is Active</th>
+                    <th></th>
+                    <th></th>
+                  </tr>
+                  {% for watch in watch_list %}
+                  <tr>
+                    <td>{{ watch.watchId }}</td>
+                    <td>
+                      Name: {{ watch.studentName }}<br />
+                      Grade: {{ watch.grade }}
+                    </td>
+                    <td>{{watch.isActive}}</td>
+                    <td>
+                      <a href="/editStudentData/{{watch.watchId}}">
+                        Edit Student Data</a
+                      >
+                    </td>
+                    <td>
+                      <a href="/removeWatch/{{watch.watchId}}">Remove Watch</a>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </table>
+              </div>
+              <button onclick="toggleAddWatchWindow()">Add New Watch</button>
             </div>
-            <button onclick="toggleAddWatchWindow()">Add New Watch</button>
           </div>
         </div>
       </div>
