@@ -32,22 +32,52 @@
             </div>
             {% endfor %}
             <h3 style="margin-left: 0.1em">Add contact</h3>
-            <form action="/manageWhatsappList" method="POST">
+            <form action="/manageWhatsappList" method="POST" id="contactForm">
+              <div class="inputLabel">Teacher Name</div>
               <input
                 type="text"
                 name="teacherName"
                 placeholder="Teacher Name"
+                id="teacherName"
               />
+              <div class="inputLabel">Phone Number</div>
               <input
                 type="text"
                 name="phoneNumber"
                 placeholder="Phone Number (e.g. +966512345678)"
+                id="phoneNumber"
               />
-              <button>Add new contact</button>
+              <button type="button" onclick="submitContactForm()">
+                Add new contact
+              </button>
             </form>
           </div>
         </div>
       </div>
     </div>
+    <script>
+      function submitContactForm() {
+        console.log("function call!");
+        let form = document.getElementById("contactForm");
+        let teacherName = document.getElementById("teacherName").value;
+        let phoneNumber = document.getElementById("phoneNumber").value;
+
+        let numberFormat = new RegExp("\\+[\\d]{12}");
+
+        if (!teacherName) {
+          alert("Teacher name can not be empty!");
+          return;
+        }
+
+        if (!numberFormat.test(phoneNumber)) {
+          alert(
+            "Incorrect number format! make sure you enter the number as follows: +966512345678"
+          );
+          return;
+        }
+
+        form.submit();
+      }
+    </script>
   </body>
 </html>
