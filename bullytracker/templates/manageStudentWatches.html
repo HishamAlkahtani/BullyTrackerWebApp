@@ -16,10 +16,6 @@
         z-index: 100;
       }
 
-      h2 {
-        text-align: center;
-      }
-
       #overlay {
         position: absolute;
         width: 100%;
@@ -68,7 +64,16 @@
           </div>
           <div class="cardContainer">
             <div class="mainCard">
-              <h2>Watches and Students</h2>
+              <div style="display: flex; align-items: center; gap: 1em">
+                <img
+                  src="/back.svg"
+                  alt=""
+                  width="40px"
+                  style="cursor: pointer"
+                  onclick="window.location='/'"
+                />
+                <h2 class="center">Students and Watches</h2>
+              </div>
               <div class="subCard">
                 <table>
                   <tr>

@@ -12,7 +12,16 @@
       <div style="width: 100%">
         <div class="cardContainer">
           <div class="mainCard">
-            <h1 class="center">Messaging List</h1>
+            <div style="display: flex; align-items: center; gap: 1em">
+              <img
+                src="/back.svg"
+                alt=""
+                width="40px"
+                style="cursor: pointer"
+                onclick="window.location='/'"
+              />
+              <h2 class="center">Messaging List</h2>
+            </div>
             {% for contact in messaging_list %}
             <div class="subCard">
               {{contact.teacherName}} <br />

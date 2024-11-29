@@ -31,7 +31,16 @@
       <div style="width: 100%">
         <div class="cardContainer">
           <div class="mainCard">
-            <h2 class="center">Manage School Boundaries</h2>
+            <div style="display: flex; align-items: center; gap: 1em">
+              <img
+                src="/back.svg"
+                alt=""
+                width="40px"
+                style="cursor: pointer"
+                onclick="window.location='/'"
+              />
+              <h2 class="center">Manage School Boundaries</h2>
+            </div>
             <div id="map"></div>
             <form
               action="/manageSchoolBoundaries/clearBoundaries"
